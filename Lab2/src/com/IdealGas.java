@@ -1,4 +1,4 @@
-package com.company;
+package com;
 
 public class IdealGas {
     private Pressure pressure;
@@ -7,49 +7,49 @@ public class IdealGas {
 
     final private double R = 8.314;
 
-    public IdealGas(double p, double V, double T) {
+    public IdealGas(double p, double v, double t) {
         pressure = new Pressure(p);
-        volume = new Volume(V);
-        temperature = new Temperature(T);
+        volume = new Volume(v);
+        temperature = new Temperature(t);
     }
 
     public String getInfo() {
-        return String.format("Текущее состояние системы: давление = %s, объем = %s, температура = %s", pressure.getValue(), volume.getValue(), temperature.getValue());
+        return String.format("Давление = %.2f, объем = %.2f, температура = %.2f", pressure.getValue(), volume.getValue(), temperature.getValue());
     }
 
-    public double addP(double multiplicator) {
-        pressure.setValue(pressure.getValue() * multiplicator);
-        volume.setValue(volume.getValue() / multiplicator);
+    public double add(Pressure p) {
+        pressure.setValue(pressure.getValue() * p.getValue());
+        volume.setValue(volume.getValue() / p.getValue());
         return pressure.getValue();
     }
 
-    public double reduceP(double multiplicator) {
-        pressure.setValue(pressure.getValue() / multiplicator);
-        volume.setValue(volume.getValue() * multiplicator);
+    public double reduce(Pressure p) {
+        pressure.setValue(pressure.getValue() / p.getValue());
+        volume.setValue(volume.getValue() * p.getValue());
         return pressure.getValue();
     }
 
-    public double addV(double multiplicator) {
-        volume.setValue(volume.getValue() * multiplicator);
-        pressure.setValue(pressure.getValue() / multiplicator);
+    public double add(Volume v) {
+        volume.setValue(volume.getValue() * v.getValue());
+        pressure.setValue(pressure.getValue() / v.getValue());
         return volume.getValue();
     }
 
-    public double reduceV(double multiplicator) {
-        volume.setValue(volume.getValue() / multiplicator);
-        pressure.setValue(pressure.getValue() * multiplicator);
+    public double reduce(Volume v) {
+        volume.setValue(volume.getValue() / v.getValue());
+        pressure.setValue(pressure.getValue() * v.getValue());
         return volume.getValue();
     }
 
-    public double addT(double multiplicator) {
-        temperature.setValue(temperature.getValue() * multiplicator);
-        pressure.setValue(pressure.getValue() * multiplicator);
+    public double add(Temperature t) {
+        temperature.setValue(temperature.getValue() * t.getValue());
+        pressure.setValue(pressure.getValue() * t.getValue());
         return temperature.getValue();
     }
 
-    public double reduceT(double multiplicator) {
-        temperature.setValue(temperature.getValue() / multiplicator);
-        pressure.setValue(pressure.getValue() / multiplicator);
+    public double reduce(Temperature t) {
+        temperature.setValue(temperature.getValue() / t.getValue());
+        pressure.setValue(pressure.getValue() / t.getValue());
         return temperature.getValue();
     }
 

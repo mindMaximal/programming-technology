@@ -1,4 +1,4 @@
-package com.company;
+package com;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +11,10 @@ class IdealGasTest {
 
         IdealGas idealGas = new IdealGas(5, 3, 5);
 
-        int resultP = 15;
-        int resultV = 1;
+        int resultP = 25;
+        double resultV = 0.6;
 
-        double valueP = idealGas.addP(3);
+        double valueP = idealGas.add(new Pressure(5));
         double valueV = idealGas.getVolume();
 
         assertEquals(resultP, valueP);
@@ -29,7 +29,7 @@ class IdealGasTest {
         int resultP = 1;
         int resultV = 15;
 
-        double valueP = idealGas.reduceP(5);
+        double valueP = idealGas.reduce(new Pressure(5));
         double valueV = idealGas.getVolume();
 
         assertEquals(resultP, valueP);
@@ -44,7 +44,7 @@ class IdealGasTest {
         int resultP = 1;
         int resultV = 15;
 
-        double valueV = idealGas.addV(5);
+        double valueV = idealGas.add(new Volume(5));
         double valueP = idealGas.getPressure();
 
         assertEquals(resultP, valueP);
@@ -59,7 +59,7 @@ class IdealGasTest {
         int resultP = 15;
         int resultV = 1;
 
-        double valueV = idealGas.reduceV(3);
+        double valueV = idealGas.reduce(new Volume(3));
         double valueP = idealGas.getPressure();
 
         assertEquals(resultP, valueP);
@@ -75,7 +75,7 @@ class IdealGasTest {
         int resultT = 25;
 
 
-        double valueT = idealGas.addT(5);
+        double valueT = idealGas.add(new Temperature(5));
         double valueP = idealGas.getPressure();
 
         assertEquals(resultP, valueP);
@@ -90,7 +90,7 @@ class IdealGasTest {
         int resultP = 1;
         int resultT = 1;
 
-        double valueT = idealGas.reduceT(5);
+        double valueT = idealGas.reduce(new Temperature(5));
         double valueP = idealGas.getPressure();
 
         assertEquals(resultP, valueP);
