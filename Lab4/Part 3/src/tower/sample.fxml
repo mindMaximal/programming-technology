@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="295.0" prefWidth="523.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tower.Controller">
+   <children>
+      <ListView fx:id="lstStart" layoutX="26.0" layoutY="66.0" prefHeight="200.0" prefWidth="129.0" />
+      <Label fx:id="counterLabel" layoutX="26.0" layoutY="32.0" prefHeight="17.0" prefWidth="303.0" text="Количество шагов:" />
+      <ListView fx:id="lstBuffer" layoutX="200.0" layoutY="66.0" prefHeight="200.0" prefWidth="129.0" />
+      <ListView fx:id="lstEnd" layoutX="370.0" layoutY="66.0" prefHeight="200.0" prefWidth="129.0" />
+      <Button layoutX="370.0" layoutY="28.0" mnemonicParsing="false" onAction="#StartOver" prefHeight="25.0" prefWidth="129.0" text="Начать заново" />
+   </children>
+</AnchorPane>
