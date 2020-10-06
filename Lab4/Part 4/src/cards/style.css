@@ -1,0 +1,14 @@
+.card-patch {
+    -fx-border-color: #17652e;
+    -fx-border-width: 10px;
+    -fx-background-color: #0a7339;
+    -fx-border-radius: 3px;
+}
+
+.card-cover {
+    -fx-background-color: #374ab3;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 10px;
+    -fx-border-radius: 3px;
+    -fx-text-fill: #ffffff;
+}
