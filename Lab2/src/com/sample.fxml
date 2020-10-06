@@ -55,12 +55,12 @@
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <ComboBox fx:id="select" prefHeight="25.0" prefWidth="196.0" promptText="Выберете ...">
+            <ComboBox fx:id="comboBox" prefHeight="25.0" prefWidth="196.0" promptText="Выберете ...">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>
             </ComboBox>
-            <TextField fx:id="txt" prefHeight="10.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <TextField fx:id="txtInputText" prefHeight="10.0" prefWidth="200.0" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>

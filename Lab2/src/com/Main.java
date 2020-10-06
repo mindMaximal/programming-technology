@@ -10,7 +10,20 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        // нашу первую строчку мы расщепляем пополам
+        // сначала формируем загрузчик и привязываем его к файлу
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        // а затем уже непосредственно вызываем загрузку дерева разметки из файла
+        Parent root = loader.load();
+
+        // добавляем эту строчку, собственно ради чего мы первую строку и расщепили
+        // тут мы вытаскиваем контроллер которые был создан при вызове метода load
+        // и сохраняем ссылку на него в переменную
+        Controller controller = loader.getController();
+
+        // а тут привязываем событие закрытия приложения к нашей функции onStageClose
+        primaryStage.setOnHidden(e -> controller.onStageClose());
+
         primaryStage.setTitle("Идеальный газ");
         primaryStage.setScene(new Scene(root, 500, 275));
         primaryStage.show();
