@@ -65,7 +65,8 @@ public class Card {
         return suit;
     }
 
-    public String getValue() {
+    @Override
+    public String toString() {
 
         String msg = "";
 

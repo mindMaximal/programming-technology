@@ -2,12 +2,13 @@ package cards;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
@@ -17,7 +18,6 @@ import javafx.scene.input.*;
     Пики   Червы  Крести  Буби
  */
 
-import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,11 +25,18 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    Card currentCard;
-
+    @FXML
+    public Label bufferLabel1;
+    @FXML
+    public Label bufferLabel2;
+    @FXML
+    public Label bufferLabel3;
+    @FXML
+    public Label bufferLabel4;
+    @FXML
+    public Button currentCardBtn;
     @FXML
     public Label currentCardLabel;
-
     @FXML
     public ListView<Card> lstSpades;
     @FXML
@@ -39,6 +46,9 @@ public class Controller implements Initializable {
     @FXML
     public ListView<Card> lstDiamonds;
 
+    Card currentCard;
+    int currentCardIndex;
+
     ObservableList<Card> lstSpadesItems = FXCollections.observableArrayList();
     ObservableList<Card> lstHeartsItems = FXCollections.observableArrayList();
     ObservableList<Card> lstClubsItems = FXCollections.observableArrayList();
@@ -46,20 +56,33 @@ public class Controller implements Initializable {
 
     ArrayList<Card> deck;
 
+    Buffer buffer;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        deck = createDeck();
+        ArrayList<Label> bufferLabels = new ArrayList<>();
 
+        bufferLabels.add(bufferLabel1);
+        bufferLabels.add(bufferLabel2);
+        bufferLabels.add(bufferLabel3);
+        bufferLabels.add(bufferLabel4);
+
+        for (Label label : bufferLabels) {
+            label.setOnDragOver(this::onBufferDragOver);
+            label.setOnDragDropped(this::onBufferDragDropped);
+        }
+
+        buffer = new Buffer();
+
+        deck = createDeck();
         Collections.shuffle(deck);
 
-        currentCard = deck.get(deck.size() - 1);
-        currentCardLabel.setText(currentCard.getValue());
 
-//        lstSpades.setItems(lstSpadesItems);
-//        lstHeart.setItems(lstHeartsItems);
-//        lstClubs.setItems(lstClubsItems);
-//        lstDiamonds.setItems(lstDiamondsItems);
+        currentCardIndex = deck.size() - 1;
+        currentCard = deck.get(currentCardIndex);
+
 
 //        lstSpades.setCellFactory(param -> new ListCell<Card>() {
 //            @Override
@@ -73,59 +96,22 @@ public class Controller implements Initializable {
 //                }
 //            }
 //        });
-//
-//        lstHeart.setCellFactory(param -> new ListCell<Card>() {
-//            @Override
-//            protected void updateItem(Card item, boolean empty) {
-//                super.updateItem(item, empty);
-//
-//                if (empty || item == null || item.getValue() == null) {
-//                    setText(null);
-//                } else {
-//                    setText(item.getValue());
-//                }
-//            }
-//        });
-//
-//        lstClubs.setCellFactory(param -> new ListCell<Card>() {
-//            @Override
-//            protected void updateItem(Card item, boolean empty) {
-//                super.updateItem(item, empty);
-//
-//                if (empty || item == null || item.getValue() == null) {
-//                    setText(null);
-//                } else {
-//                    setText(item.getValue());
-//                }
-//            }
-//        });
-//
-//        lstDiamonds.setCellFactory(param -> new ListCell<Card>() {
-//            @Override
-//            protected void updateItem(Card item, boolean empty) {
-//                super.updateItem(item, empty);
-//
-//                if (empty || item == null || item.getValue() == null) {
-//                    setText(null);
-//                } else {
-//                    setText(item.getValue());
-//                }
-//            }
-//        });
-//
-//        //Захватываем
-//        currentCardLabel.setOnDragDetected(this::onDragDetected);
-//        //Двигаем над списком
-//        lstSpades.setOnDragOver(this::onListViewDragOver);
-//        lstHeart.setOnDragOver(this::onListViewDragOver);
-//        lstClubs.setOnDragOver(this::onListViewDragOver);
-//        lstDiamonds.setOnDragOver(this::onListViewDragOver);
-//        //Отпускаем мышь
-//        lstSpades.setOnDragDropped(this::onListViewDragDropped);
-//        lstHeart.setOnDragDropped(this::onListViewDragDropped);
-//        lstClubs.setOnDragDropped(this::onListViewDragDropped);
-//        lstDiamonds.setOnDragDropped(this::onListViewDragDropped);
+
+
+        currentCardLabel.setOnDragDetected(this::onDragDetected);
+
+
+
+   /*     lstSpades.setOnDragOver(this::onListViewDragOver);
+        lstHeart.setOnDragOver(this::onListViewDragOver);
+        lstClubs.setOnDragOver(this::onListViewDragOver);
+        lstDiamonds.setOnDragOver(this::onListViewDragOver);
+        lstSpades.setOnDragDropped(this::onListViewDragDropped);
+        lstHeart.setOnDragDropped(this::onListViewDragDropped);
+        lstClubs.setOnDragDropped(this::onListViewDragDropped);
+        lstDiamonds.setOnDragDropped(this::onListViewDragDropped);*/
     }
+
 
     private void onDragDetected(MouseEvent mouseEvent) {
 
@@ -134,6 +120,11 @@ public class Controller implements Initializable {
         }
 
         Node sourceNode = (Node) mouseEvent.getSource();
+        System.out.println( );
+
+        if(((Label) mouseEvent.getSource()).getText().trim().length() == 0) {
+            return;
+        }
 
         Dragboard db = sourceNode.startDragAndDrop(TransferMode.ANY);
 
@@ -146,41 +137,82 @@ public class Controller implements Initializable {
         mouseEvent.consume();
     }
 
-    private void onListViewDragOver(DragEvent dragEvent) {
-
-        ListView<Card> targetListView = (ListView) dragEvent.getSource();
-
-        if (currentCard.getSuit() == Card.Suit.SPADES && targetListView == lstSpades || currentCard.getSuit() == Card.Suit.CLUBS && targetListView == lstClubs || currentCard.getSuit() == Card.Suit.HEARTS && targetListView == lstHeart || currentCard.getSuit() == Card.Suit.DIAMONDS && targetListView == lstDiamonds) {
-            dragEvent.acceptTransferModes(TransferMode.ANY);
-        }
+    private void onBufferDragOver(DragEvent dragEvent) {
+        dragEvent.acceptTransferModes(TransferMode.ANY);
     }
 
-    private void onListViewDragDropped(DragEvent dragEvent) {
-        ListView<Card> targetListView = (ListView) dragEvent.getGestureTarget();
+    private void onBufferDragDropped(DragEvent dragEvent) {
+        Label target = (Label) dragEvent.getGestureTarget();
+        Label source = (Label) dragEvent.getGestureSource();
 
-        Label sourceLabel = (Label) dragEvent.getGestureSource();
-        targetListView.getItems().add(currentCard);
+        /*System.out.println("target: " + target);
+        System.out.println("source: " + source);*/
+
+        clearCurrentCard();
+
+        buffer.addItem(target, currentCard);
 
         deckUpdate();
     }
 
+    public void changeCard(ActionEvent actionEvent) {
+
+        System.out.println("Current card: " + currentCard + " Index: " + currentCardIndex + " deck size:" + deck.size());
+
+        System.out.println(deck);
+
+        if (deck.size() > 0) {
+            currentCardLabel.setText(deck.get(currentCardIndex).toString());
+            currentCardIndex--;
+
+            currentCardLabel.getStyleClass().add("card--active");
+
+            if (currentCardIndex == -1) {
+                currentCardIndex = deck.size() - 1;
+            }
+
+        } else {
+            deckEmptyRender();
+        }
+
+    }
+
+    private void deckEmptyRender() {
+        currentCardBtn.setText("Колода\r\n пуста");
+        currentCardBtn.setDisable(true);
+
+        currentCard = null;
+
+        currentCardLabel.getStyleClass().remove("card--active");
+        currentCardLabel.setText("");
+    }
+
     private void deckUpdate() {
-        deck.remove(deck.size() - 1);
+        deck.remove(currentCardIndex);
+        currentCardIndex--;
+
+        if (currentCardIndex == -1) {
+            currentCardIndex = deck.size() - 1;
+        }
 
         if (deck.isEmpty()) {
-            currentCard = null;
-            currentCardLabel.setText("Колода пуста");
+            deckEmptyRender();
         } else {
-            currentCard = deck.get(deck.size() - 1);
-            currentCardLabel.setText(currentCard.getValue());
+            currentCard = deck.get(currentCardIndex);
+            //currentCardLabel.setText(currentCard.toString());
         }
+    }
+
+    private void clearCurrentCard() {
+        currentCardLabel.getStyleClass().remove("card--active");
+        currentCardLabel.setText("");
     }
 
     public ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<Card>();
 
         for (int i = 0; i < Card.Suit.values().length; i++) {
-            for (int j = 2; j < 15; j++) {
+            for (int j = 2; j < 3; j++) {
                 deck.add(new Card(j, i));
             }
         }
@@ -192,4 +224,5 @@ public class Controller implements Initializable {
         SnapshotParameters snapshotParams = new SnapshotParameters();
         return node.snapshot(snapshotParams, null);
     }
+
 }

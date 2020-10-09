@@ -1,5 +1,7 @@
 package tower;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 
@@ -42,6 +45,22 @@ public class Controller implements Initializable {
         lstStart.setItems(lstStartItems);
         lstBuffer.setItems(lstBufferItems);
         lstEnd.setItems(lstEndItems);
+
+        lstStart.setOnMouseClicked(event -> {
+            System.out.println("test");
+            int index = lstStart.getSelectionModel().getSelectedIndex();
+            lstStart.getSelectionModel().clearSelection();
+        });
+
+        MultipleSelectionModel<Circle> langsSelectionModel = lstStart.getSelectionModel();
+        // устанавливаем слушатель для отслеживания изменений
+        langsSelectionModel.selectedItemProperty().addListener(new InvalidationListener() {
+                    @Override
+                    public void invalidated(Observable observable) {
+                        System.out.println("test");
+                    }
+                }
+        );
 
         lstStart.setCellFactory(param -> new ListCell<Circle>() {
             @Override
