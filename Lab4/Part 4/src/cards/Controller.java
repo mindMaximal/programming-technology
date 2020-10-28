@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 
 /*
     SPADES HEARTS CLUBS   DIAMONDS
@@ -33,6 +34,7 @@ public class Controller implements Initializable {
     public Label bufferLabel3;
     @FXML
     public Label bufferLabel4;
+
     @FXML
     public Button currentCardBtn;
     @FXML
@@ -45,6 +47,20 @@ public class Controller implements Initializable {
     public ListView<Card> lstClubs;
     @FXML
     public ListView<Card> lstDiamonds;
+    @FXML
+    public AnchorPane anchorpane1;
+    @FXML
+    public AnchorPane anchorpane2;
+    @FXML
+    public AnchorPane anchorpane3;
+    @FXML
+    public AnchorPane anchorpane4;
+    @FXML
+    public AnchorPane anchorpane5;
+    @FXML
+    public AnchorPane anchorpane6;
+    @FXML
+    public AnchorPane anchorpane7;
 
     Card currentCard;
     int currentCardIndex;
@@ -57,7 +73,6 @@ public class Controller implements Initializable {
     ArrayList<Card> deck;
 
     Buffer buffer;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -74,15 +89,50 @@ public class Controller implements Initializable {
             label.setOnDragDropped(this::onBufferDragDropped);
         }
 
+        ArrayList<AnchorPane> cells = new ArrayList<>();
+
+        cells.add(anchorpane1);
+        cells.add(anchorpane2);
+        cells.add(anchorpane3);
+        cells.add(anchorpane4);
+        cells.add(anchorpane5);
+        cells.add(anchorpane6);
+        cells.add(anchorpane7);
+
+
+        int count = 1;
+        for (AnchorPane pane : cells) {
+
+            for (int i = 0; i < count; i++) {
+                Label newCard = null;
+
+                if (i == count - 1) {
+                     newCard = createCard("Text");
+                } else {
+                     newCard = createCard();
+                }
+
+                pane.getChildren().add(newCard);
+
+                pane.setTopAnchor(newCard,20.00 * i);
+
+                newCard.toFront();
+            }
+
+            count++;
+        }
+
+        for (AnchorPane pane : cells) {
+
+        }
+
         buffer = new Buffer();
 
         deck = createDeck();
         Collections.shuffle(deck);
 
-
         currentCardIndex = deck.size() - 1;
         currentCard = deck.get(currentCardIndex);
-
 
 //        lstSpades.setCellFactory(param -> new ListCell<Card>() {
 //            @Override
@@ -112,7 +162,6 @@ public class Controller implements Initializable {
         lstDiamonds.setOnDragDropped(this::onListViewDragDropped);*/
     }
 
-
     private void onDragDetected(MouseEvent mouseEvent) {
 
         if (deck.isEmpty()) {
@@ -120,7 +169,6 @@ public class Controller implements Initializable {
         }
 
         Node sourceNode = (Node) mouseEvent.getSource();
-        System.out.println( );
 
         if(((Label) mouseEvent.getSource()).getText().trim().length() == 0) {
             return;
@@ -138,7 +186,42 @@ public class Controller implements Initializable {
     }
 
     private void onBufferDragOver(DragEvent dragEvent) {
-        dragEvent.acceptTransferModes(TransferMode.ANY);
+        Label target = (Label) dragEvent.getGestureTarget();
+        Label source = (Label) dragEvent.getGestureSource();
+
+        boolean draggble = false;
+
+        BufferItem list = buffer.getList((Label) dragEvent.getTarget());
+
+        /*System.out.println("\r\ntarget: " + target);
+        System.out.println("source: " + source);
+        System.out.println("getTarget: " + dragEvent.getTarget());
+        System.out.println("getSource: " + dragEvent.getSource());*/
+
+
+        //Проверку нужно делать через буффер, так как поля не определены еще
+        if (list == null && currentCard.getValue() == 1) {
+            draggble = true;
+        } else {
+            Card.Suit suit = list.getSuit();
+            Card lastCard = list.getLastCard();
+
+            System.out.println("currentCard: " + currentCard.getValue());
+            System.out.println("Last card: " + lastCard.getValue());
+
+            if (suit == currentCard.getSuit() && currentCard.getValue() - 1 == lastCard.getValue() ) {
+                draggble = true;
+            }
+
+        }
+
+        if (draggble) {
+            dragEvent.acceptTransferModes(TransferMode.MOVE);
+        } else {
+            dragEvent.acceptTransferModes(TransferMode.NONE);
+        }
+
+        dragEvent.consume();
     }
 
     private void onBufferDragDropped(DragEvent dragEvent) {
@@ -153,22 +236,29 @@ public class Controller implements Initializable {
         buffer.addItem(target, currentCard);
 
         deckUpdate();
+
+        dragEvent.consume();
     }
 
     public void changeCard(ActionEvent actionEvent) {
 
-        System.out.println("Current card: " + currentCard + " Index: " + currentCardIndex + " deck size:" + deck.size());
+        //System.out.println("\r\nCurrent card: " + currentCard + " Index: " + currentCardIndex + " deck size:" + deck.size());
 
-        System.out.println(deck);
+        //System.out.println(deck);
 
         if (deck.size() > 0) {
-            currentCardLabel.setText(deck.get(currentCardIndex).toString());
+
             currentCardIndex--;
 
-            currentCardLabel.getStyleClass().add("card--active");
-
-            if (currentCardIndex == -1) {
+            if (currentCardIndex < 0) {
                 currentCardIndex = deck.size() - 1;
+            }
+
+            currentCard = deck.get(currentCardIndex);
+            currentCardLabel.setText(currentCard.toString());
+
+            if (!currentCardLabel.getStyleClass().contains("card--active")) {
+                currentCardLabel.getStyleClass().add("card--active");
             }
 
         } else {
@@ -178,7 +268,7 @@ public class Controller implements Initializable {
     }
 
     private void deckEmptyRender() {
-        currentCardBtn.setText("Колода\r\n пуста");
+        currentCardBtn.setText("Колода\r\nпуста");
         currentCardBtn.setDisable(true);
 
         currentCard = null;
@@ -188,31 +278,38 @@ public class Controller implements Initializable {
     }
 
     private void deckUpdate() {
-        deck.remove(currentCardIndex);
-        currentCardIndex--;
-
-        if (currentCardIndex == -1) {
-            currentCardIndex = deck.size() - 1;
-        }
 
         if (deck.isEmpty()) {
             deckEmptyRender();
         } else {
             currentCard = deck.get(currentCardIndex);
-            //currentCardLabel.setText(currentCard.toString());
         }
+
     }
 
     private void clearCurrentCard() {
-        currentCardLabel.getStyleClass().remove("card--active");
-        currentCardLabel.setText("");
+
+        if (deck.isEmpty()) {
+            deckEmptyRender();
+        } else {
+            currentCard = deck.get(currentCardIndex);
+            deck.remove(currentCardIndex);
+            currentCardIndex--;
+
+            if (currentCardIndex < 0) {
+                currentCardIndex = deck.size() - 1;
+            }
+
+            currentCardLabel.getStyleClass().remove("card--active");
+            currentCardLabel.setText("");
+        }
     }
 
     public ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<Card>();
 
         for (int i = 0; i < Card.Suit.values().length; i++) {
-            for (int j = 2; j < 3; j++) {
+            for (int j = 1; j < 3; j++) {
                 deck.add(new Card(j, i));
             }
         }
@@ -223,6 +320,22 @@ public class Controller implements Initializable {
     private WritableImage createSnapshot(Node node) {
         SnapshotParameters snapshotParams = new SnapshotParameters();
         return node.snapshot(snapshotParams, null);
+    }
+
+    public Label createCard(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("card");
+        label.getStyleClass().add("card--active");
+
+        return label;
+    }
+
+    public Label createCard() {
+        Label label = new Label("");
+        label.getStyleClass().add("card");
+        label.getStyleClass().add("card-cover");
+
+        return label;
     }
 
 }

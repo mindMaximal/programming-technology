@@ -71,6 +71,9 @@ public class Card {
         String msg = "";
 
         switch (value) {
+            case 1:
+                msg = "Туз";
+                break;
             case 2:
                 msg = "Два";
                 break;
@@ -107,9 +110,9 @@ public class Card {
             case 13:
                 msg = "Король";
                 break;
-            case 14:
+            /*case 14:
                 msg = "Туз";
-                break;
+                break;*/
             default:
                 break;
         }
@@ -122,7 +125,7 @@ public class Card {
                 msg += " черви";
                 break;
             case CLUBS:
-                msg += " креси";
+                msg += " крести";
                 break;
             case DIAMONDS:
                 msg += " буби";
@@ -132,6 +135,10 @@ public class Card {
         }
 
         return  msg;
+    }
+
+    public int getValue() {
+        return this.value;
     }
 
 }

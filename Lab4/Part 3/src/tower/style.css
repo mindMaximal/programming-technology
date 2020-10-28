@@ -1,0 +1,6 @@
+.list-cell:filled:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: black;
+}
