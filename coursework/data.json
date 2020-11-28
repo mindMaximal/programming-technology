@@ -1,0 +1,26 @@
+[ {
+  "@class" : "sample.models.Film",
+  "name" : "Movie 1",
+  "rating" : 5,
+  "id" : 1,
+  "timing" : 55.3,
+  "awardsCount" : 3,
+  "type" : "documentary",
+  "description" : "Фильм типа документальный, хронометраж 55.3. Он получил 3 наград"
+}, {
+  "@class" : "sample.models.Serial",
+  "name" : "Serial 1",
+  "rating" : 8,
+  "id" : 2,
+  "seriesCount" : 10,
+  "seasonCount" : 2,
+  "description" : "Сериал состоит из 2 серий и 2 сезонов"
+}, {
+  "@class" : "sample.models.Telecast",
+  "name" : "Telecast 1",
+  "rating" : 7,
+  "id" : 3,
+  "duration" : 50.34,
+  "airtime" : "20:30 - 21:30",
+  "description" : "Телеперадача длительностью 50,34 и его эфирное время: 20:30 - 21:30"
+} ]
