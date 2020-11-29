@@ -5,7 +5,11 @@ public class Film extends Movie {
         documentary("документальный"),
         historical("исторический"),
         fiction("фантастика"),
-        scientific("научный");
+        scientific("научный"),
+        music("музыка"),
+        musical("мюзикл"),
+        concert("концерт"),
+        none("неопределен");
 
         private String title;
 
@@ -29,7 +33,7 @@ public class Film extends Movie {
 
     public Film () {};
 
-    public Film(String name, int rating, Double timing, int awardsCount, Type type) {
+    public Film(String name, Double rating, Double timing, int awardsCount, Type type) {
         super(name, rating);
         this.timing = timing;
         this.awardsCount = awardsCount;
@@ -62,6 +66,7 @@ public class Film extends Movie {
 
     @Override
     public String getDescription() {
-        return String.format("Фильм типа %s, хронометраж %s. Он получил %d наград", type, timing, awardsCount);
+        String timingString = timing == null ? "" : String.format(", хронометраж %s", timing);
+        return String.format("Фильм типа %s%s. Он получил наград: %d", type, timingString, awardsCount);
     }
 }

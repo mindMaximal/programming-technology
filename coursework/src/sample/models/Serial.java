@@ -6,7 +6,7 @@ public class Serial extends Movie {
 
     public Serial () {};
 
-    public Serial(String name, int rating, int seriesCount, int seasonCount) {
+    public Serial(String name, Double rating, int seriesCount, int seasonCount) {
         super(name, rating);
         this.seriesCount = seriesCount;
         this.seasonCount = seasonCount;
@@ -30,7 +30,7 @@ public class Serial extends Movie {
 
     @Override
     public String getDescription() {
-        return String.format("Сериал состоит из %d серий и %d сезонов", seasonCount, seasonCount);
+        return String.format("Серий: %d, сезонов: %d", seriesCount, seasonCount);
     }
 }
 

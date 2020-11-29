@@ -108,7 +108,7 @@ public class MovieFormController implements Initializable {
     public Movie getMovie() {
         Movie result = null;
         String name = this.txtMovieName.getText();
-        int rating = Integer.parseInt(this.txtMovieRating.getText());
+        double rating = Double.parseDouble(this.txtMovieRating.getText());
 
         switch ((String)this.cmbMovieType.getValue()) {
             case MOVIE_FILM:

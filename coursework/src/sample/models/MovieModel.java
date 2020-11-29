@@ -2,6 +2,7 @@ package sample.models;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,6 +11,11 @@ import java.util.stream.Collectors;
 public class MovieModel {
     ArrayList<Movie> movieList = new ArrayList();
     private int counter = 1;
+
+    private final String URL_MOVIES = "file:kino.json";
+    private final String URL_SERIALS = "file:serial.json";
+    //private final String URL_MOVIES = "https://api.kinopoisk.cloud/movies/all/page/1/token/38aadd8621b36eb590a88ff375869824";
+    //private final String URL_SERIALS = "https://api.kinopoisk.cloud/tv-series/all/page/1/token/38aadd8621b36eb590a88ff375869824";
 
     Class<? extends Movie> movieFilter = Movie.class;
 
@@ -28,9 +34,30 @@ public class MovieModel {
     public void load() {
         movieList.clear();
 
-        this.add(new Film("Movie 1", 5, 55.30, 3, Film.Type.documentary), false);
-        this.add(new Serial("Serial 1",8, 10, 2), false);
-        this.add(new Telecast("Telecast 1", 7, 50.34, "20:30 - 21:30"), false);
+        try {
+            ArrayList<JSONObject> data = JSONModel.load(URL_MOVIES, "movies");
+
+            if (!data.isEmpty()) {
+                for (JSONObject el : data) {
+                    this.add(JSONModel.getDataFromJson(el), false);
+                }
+            }
+
+            data = JSONModel.load(URL_SERIALS, "tv-series");
+
+            if (!data.isEmpty()) {
+                for (JSONObject el : data) {
+                    this.add(JSONModel.getDataFromJson(el), false);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*this.add(new Film("Movie 1", 5.00, 55.30, 3, Film.Type.documentary), false);
+        this.add(new Serial("Serial 1",8.00, 10, 2), false);*/
+        this.add(new Telecast("Telecast 1", 7.00, 50.34, "20:30 - 21:30"), false);
 
         this.emitDataChanged();
     }
@@ -78,19 +105,19 @@ public class MovieModel {
     private void emitDataChanged() {
         for (DataChangedListener listener : dataChangedListeners) {
             ArrayList<Movie> filteredList = new ArrayList<>(
-                    movieList.stream() // запускаем стрим
-                            .filter(food -> movieFilter.isInstance(food)) // фильтруем по типу
-                            .collect(Collectors.toList()) // превращаем в список
+                    movieList.stream()
+                            .filter(food -> movieFilter.isInstance(food))
+                            .collect(Collectors.toList())
             );
-            listener.dataChanged(filteredList); // подсовывам сюда список
+            listener.dataChanged(filteredList);
         }
     }
 
     public void saveToFile(String path) {
         try (Writer writer =  new FileWriter(path)) {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writerFor(new TypeReference<ArrayList<Movie>>() { }) // указали какой тип подсовываем
-                    .withDefaultPrettyPrinter() // кстати эта строчка чтобы в файлике все красиво печаталось
+            mapper.writerFor(new TypeReference<ArrayList<Movie>>() { })
+                    .withDefaultPrettyPrinter()
                     .writeValue(writer, movieList);
         } catch (IOException e) {
             e.printStackTrace();

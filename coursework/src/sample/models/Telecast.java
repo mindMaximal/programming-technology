@@ -6,7 +6,7 @@ public class Telecast extends Movie {
 
     public Telecast () {};
 
-    public Telecast(String name, int rating, Double duration, String airtime) {
+    public Telecast(String name, Double rating, Double duration, String airtime) {
         super(name, rating);
         this.duration = duration;
         this.airtime = airtime;
