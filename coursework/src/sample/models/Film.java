@@ -44,24 +44,12 @@ public class Film extends Movie {
         return timing;
     }
 
-    public void setTiming(Double timing) {
-        this.timing = timing;
-    }
-
     public int getAwardsCount() {
         return awardsCount;
     }
 
-    public void setAwardsCount(int awardsCount) {
-        this.awardsCount = awardsCount;
-    }
-
     public Type getType() {
         return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     @Override

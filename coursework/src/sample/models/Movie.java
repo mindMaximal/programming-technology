@@ -30,14 +30,6 @@ public class Movie {
         return rating;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
     public String getDescription() {
         return "";
     }

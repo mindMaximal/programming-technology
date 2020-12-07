@@ -20,15 +20,6 @@ public class JSONModel {
         return sb.toString();
     }
 
-    public static JSONArray readJsonFromUrl(String url) throws IOException, JSONException {
-
-        InputStream is = new URL(url).openStream();
-
-        BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-        String jsonText = readAll(rd);
-        return new JSONArray(jsonText);
-    }
-
     public static JSONArray readJsonFromUrl(String url, String obj) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();
 
@@ -38,18 +29,6 @@ public class JSONModel {
         JSONObject jsonObject = new JSONObject(jsonText);
 
         return (JSONArray) jsonObject.get(obj);
-    }
-
-    public static ArrayList<JSONObject> load(String url) throws IOException, JSONException {
-        ArrayList<JSONObject> res = new ArrayList<>();
-
-        JSONArray jsonArray = readJsonFromUrl(url);
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            res.add(jsonArray.getJSONObject(i));
-        }
-
-        return res;
     }
 
     public static ArrayList<JSONObject> load(String url, String obj) throws IOException, JSONException {

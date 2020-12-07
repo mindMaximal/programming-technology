@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class MovieModel {
-    ArrayList<Movie> movieList = new ArrayList();
+    private ArrayList<Movie> movieList = new ArrayList();
     private int counter = 1;
 
     private final String URL_MOVIES = "file:kino.json";
     private final String URL_SERIALS = "file:serial.json";
-    //private final String URL_MOVIES = "https://api.kinopoisk.cloud/movies/all/page/1/token/38aadd8621b36eb590a88ff375869824";
-    //private final String URL_SERIALS = "https://api.kinopoisk.cloud/tv-series/all/page/1/token/38aadd8621b36eb590a88ff375869824";
 
     Class<? extends Movie> movieFilter = Movie.class;
 
@@ -28,8 +26,6 @@ public class MovieModel {
     public void addDataChangedListener(DataChangedListener listener) {
         this.dataChangedListeners.add(listener);
     }
-
-    public DataChangedListener dataChangedListener;
 
     public void load() {
         movieList.clear();
@@ -141,7 +137,7 @@ public class MovieModel {
         this.emitDataChanged();
     }
 
-    public void setFoodFilter(Class<? extends Movie> movieFilter) {
+    public void setMovieFilter(Class<? extends Movie> movieFilter) {
         this.movieFilter = movieFilter;
 
         this.emitDataChanged();

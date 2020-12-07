@@ -16,16 +16,8 @@ public class Serial extends Movie {
         return seriesCount;
     }
 
-    public void setSeriesCount(int seriesCount) {
-        this.seriesCount = seriesCount;
-    }
-
     public int getSeasonCount() {
         return seasonCount;
-    }
-
-    public void setSeasonCount(int seasonCount) {
-        this.seasonCount = seasonCount;
     }
 
     @Override

@@ -16,18 +16,6 @@ public class Telecast extends Movie {
         return duration;
     }
 
-    public void setDuration(Double duration) {
-        this.duration = duration;
-    }
-
-    public String getAirtime() {
-        return airtime;
-    }
-
-    public void setAirtime(String airtime) {
-        this.airtime = airtime;
-    }
-
     @Override
     public String getDescription() {
         return String.format("Телеперадача длительностью %.2f и его эфирное время: %s", duration, airtime);
